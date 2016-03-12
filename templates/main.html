@@ -1,0 +1,33 @@
+<html>
+<head><title>Implementasi IoT</title></head>
+<body>
+    <h1>Saklar</h1>
+    <button onclick="lampu1()">Lampu 1</button>
+    <button onclick="lampu2()">Lampu 2</button>
+    <div id="log-list"></div>
+
+    <script type="text/javascript" 
+                src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var url = "http://" + document.domain + ":" + location.port;
+            var socket = io.connect(url + "/socket");
+
+            lampu1 = function(){
+                socket.emit('relay', {'relay': 1});
+            }
+
+            lampu2 = function(){
+                socket.emit('relay', {'relay': 2});
+            }
+
+            socket.on('relay', function(msg) {
+                $("#log-list").prepend('<h4>' + msg.relay + '<h4>');
+            });
+            
+        });
+    </script>
+</body>
+</html>
