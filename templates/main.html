@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Smarthome</title>
+    <title>Smarthome IoT</title>
     <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -13,33 +13,34 @@
             <h1>Saklar Lampu</h1>
         </div>
         <div data-role="content" data-theme="a" style="padding: 2em;">
+            <div style="text-align: right;" id="status">Status : </div>
             <form>
                 <div class="ui-field-contain">
                     <label for="lampu-1">Lampu taman:</label>
                     <select name="lampu-1" id="lampu-1" data-role="flipswitch" onchange="relay_push(1)">
-                        <option value="off">Off</option>
-                        <option value="on">On</option>
+                        <option value="1">Off</option>
+                        <option value="0">On</option>
                     </select>
                 </div>
                 <div class="ui-field-contain">
                     <label for="lampu-2">Lampu kamar 1:</label>
                     <select name="lampu-2" id="lampu-2" data-role="flipswitch" onchange="relay_push(2)">
-                        <option value="off">Off</option>
-                        <option value="on">On</option>
+                        <option value="1">Off</option>
+                        <option value="0">On</option>
                     </select>
                 </div>
                 <div class="ui-field-contain">
                     <label for="lampu-3">Lampu kamar 2:</label>
                     <select name="lampu-3" id="lampu-3" data-role="flipswitch" onchange="relay_push(3)">
-                        <option value="off">Off</option>
-                        <option value="on">On</option>
+                        <option value="1">Off</option>
+                        <option value="0">On</option>
                     </select>
                 </div>
                 <div class="ui-field-contain">
                     <label for="lampu-4">Lampu ruang tamu:</label>
                     <select name="lampu-4" id="lampu-4" data-role="flipswitch" onchange="relay_push(4)">
-                        <option value="off">Off</option>
-                        <option value="on">On</option>
+                        <option value="1">Off</option>
+                        <option value="0">On</option>
                     </select>
                 </div>
             </form>
@@ -50,19 +51,33 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
-            var url = "http://" + document.domain + ":" + location.port;
+            var startup = false;
+            var url = "http://ojixzzz.science:4855"; //"http://" + document.domain + ":" + location.port;
             var socket = io.connect(url + "/socket");
 
             relay_push = function(nomor){
-                socket.emit('relay', {'relay': nomor});
+                if(startup==true){
+                    socket.emit('relay', {'relay': nomor});
+                }
             }
+
+            socket.on('status', function(msg) {
+                 $('#status').html('Status: '+msg['data']);
+            });
 
             socket.on('relay', function(msg) {
                  console.log(msg.relay);
             });
 
             socket.on('relay_data', function(msg) {
-                 console.log(msg);
+                startup = false;
+                $('#lampu-1').val(msg['relay_1']).flipswitch('refresh');
+                $('#lampu-2').val(msg['relay_2']).flipswitch('refresh');
+                $('#lampu-3').val(msg['relay_3']).flipswitch('refresh');
+                $('#lampu-4').val(msg['relay_4']).flipswitch('refresh');
+                startup = true;
+
+                console.log(msg);
             });
 
         });

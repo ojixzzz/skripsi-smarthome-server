@@ -22,10 +22,14 @@ def main():
 ###########################
 @socketio.on('connect', namespace='/socket')
 def ws_conn():
+    global raspberry_connected
     global client_connected
     client_connected = client_connected+1
-    socketio.emit('msg', {'count': client_connected}, namespace='/socket')
-    socketio.emit('relay_data', namespace="/socket_rpi")
+    socketio.emit('status', {'data': '%s Klien terkoneksi' % client_connected}, namespace='/socket')
+    if raspberry_connected:
+        socketio.emit('relay_data', namespace="/socket_rpi")
+    else:
+        socketio.emit('status', {'data': 'Raspberry tidak terkoneksi'}, namespace='/socket')
 
 @socketio.on('disconnect', namespace='/socket')
 def ws_disconn():
@@ -34,7 +38,18 @@ def ws_disconn():
 
 @socketio.on('relay', namespace='/socket')
 def ws_relay(message):
-    socketio.emit('relay', message, namespace="/socket_rpi")
+    global raspberry_connected
+    if raspberry_connected:
+        socketio.emit('relay', message, namespace="/socket_rpi")
+    else:
+        data = {
+            'relay_1': '1',
+            'relay_2': '1',
+            'relay_3': '1',
+            'relay_4': '1',
+        }
+        socketio.emit('relay_data', data, namespace="/socket")
+        socketio.emit('status', {'data': 'Raspberry tidak terkoneksi'}, namespace='/socket')
 
 ###########################
 ### SOKET KE RASPBERRY  ###
@@ -51,6 +66,7 @@ def rpi_disconn():
 
 @socketio.on('relay', namespace='/socket_rpi')
 def rpi_relay(message):
+    socketio.emit('relay_data', namespace="/socket_rpi")
     socketio.emit('relay', message, namespace="/socket")
 
 @socketio.on('relay_data', namespace='/socket_rpi')
