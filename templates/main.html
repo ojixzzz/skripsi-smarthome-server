@@ -13,7 +13,8 @@
             <h1>Saklar Lampu</h1>
         </div>
         <div data-role="content" data-theme="a" style="padding: 2em;">
-            <div style="text-align: right;" id="status">Status : </div>
+            <div id="status">Status : </div>
+            <hr />
             <form>
                 <div class="ui-field-contain">
                     <label for="lampu-1">Lampu taman:</label>
@@ -76,8 +77,6 @@
                 $('#lampu-3').val(msg['relay_3']).flipswitch('refresh');
                 $('#lampu-4').val(msg['relay_4']).flipswitch('refresh');
                 startup = true;
-
-                console.log(msg);
             });
 
         });
