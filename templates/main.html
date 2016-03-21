@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    <script src="js/imageflip.mini.js"></script>
+    <script src="url_for('static', filename='js/imageflip.mini.js')"></script>
     <style type="text/css">
         small { 
             font-size: 12px;
@@ -148,8 +148,8 @@
             <hr />
             <div class="content-primary">
                 <ul id="iGallery">
-                    <li><a href="images/4f7d341e82ba1.jpg"><img src="images/_4f7d341e82ba1.jpg" /></a></li>
-                    <li><a title="Add Image discription to Title Attribe of A tag to display in here" href="images/4f7d363cb2236.jpg"><img src="images/_4f7d363cb2236.jpg" /></a></li>
+                    <li><a href="{{ url_for('static', filename='images/4f7d341e82ba1.jpg') }}"><img src="{{ url_for('static', filename='images/_4f7d341e82ba1.jpg') }}" /></a></li>
+                    <li><a title="Add Image discription to Title Attribe of A tag to display in here" href="{{ url_for('static', filename='images/4f7d363cb2236.jpg') }}"><img src="{{ url_for('static', filename='images/_4f7d363cb2236.jpg') }}" /></a></li>
                 </ul>
             </div>
         </div>
