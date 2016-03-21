@@ -86,7 +86,7 @@ def rpi_sensor_data(message):
     global tempMin
     global tempMax
     tempNow = message.get('temp')
-    if sensor_count == 3:
+    if sensor_count < 4:
         tempMax = tempNow
         tempMin = tempNow
     elif sensor_count > 100:
