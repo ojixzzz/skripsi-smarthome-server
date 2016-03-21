@@ -6,10 +6,158 @@
     <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="js/imageflip.mini.js"></script>
+    <style type="text/css">
+        small { 
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .big-icon {
+        padding-top: 1em;
+            height: 3em;
+        }
+        .big-icon::after {
+        width: 2.6em;
+        height: 2.6em;
+        background-size: 2.6em 2.6em;
+        border-radius: 0;
+        top: 38%;
+        margin-top: -11px;
+        }
+        #iGallery {
+        list-style: none;
+        padding: 0px;
+        margin: 0px
+        }
+        #iGallery li {
+        list-style: none;
+        padding: 2px;
+        margin: 2px;
+        border: 1px solid #999;
+        float: left
+        }
+        #imageflippage {
+        background-color: #000;
+        margin: 0px;
+        padding: 0px;
+        border: none;
+        height: 100%;
+        width: 100%
+        }
+        #tadcontent {
+        padding: 0px;
+        margin: 0px;
+        position: relative;
+        background: #000;
+        height: 100%;
+        width: 100%;
+        }
+        #imageflipimg {
+        vertical-align: middle;
+        height: 100%;
+        width: 100%;
+        z-index: 98;
+        background-position: center;
+        background-size: contain;
+        text-align: center;
+        background-repeat: no-repeat
+        }
+        #imagefliper {
+        width: 100%;
+        top: 45px;
+        bottom: 0px;
+        position: absolute;
+        z-index: 99
+        }
+        #tadnavi {
+        position: fixed;
+        top: 0px;
+        z-index: 100;
+        width: 100%;
+        opacity: 0.7;
+        display: none
+        }
+        #tadinfo {
+        position: fixed;
+        display: none;
+        bottom: 0px;
+        width: 100%;
+        padding: 5px;
+        background-color: #333333;
+        opacity: 0.7;
+        color: #FFFFFF;
+        text-align: center;
+        font-size: small;
+        font-family: Verdana, Geneva, sans-serif
+        }
+
+    </style>
 </head>
 <body>
-    <div data-role="page" data-theme="a">
+
+    <div data-role="page" id="page_home">
+      <div data-role="header" data-position="inline">
+        <h1>Rumah-pintar.net</h1>
+      </div>
+
+      <div data-role="main" class="ui-content" style="padding: 2em;">
+        <div class="ui-grid-a">
+          <div class="ui-block-a">
+            <a href="#page_info" data-transition="fade" class="ui-btn ui-icon-cloud ui-btn-icon-left big-icon">Informasi<br/><small>(Suhu: 30c)</small></a>
+            <a href="#page_kontrol" data-transition="fade" class="ui-btn ui-icon-gear ui-btn-icon-left big-icon">Kontrol</a>
+          </div>
+
+          <div class="ui-block-b">
+            <a href="#page_aktivitas" data-transition="fade" class="ui-btn ui-icon-camera ui-btn-icon-left big-icon">Aktivitas</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div data-role="page" id="page_info">
+      <div data-role="header" data-position="inline">
+        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-arrow-l ui-btn-icon-left">Back</a>
+        <h1>Informasi</h1>
+      </div>
+
+      <div data-role="main" class="ui-content" style="padding: 2em;">
+        <div class="ui-grid-solo">
+            <div class="ui-block-a">
+                <a href="#" class="ui-btn ui-corner-all ui-shadow">Suhu : 30c</a>
+            </div>
+        </div>
+        <div class="ui-grid-a">
+          <div class="ui-block-a">
+            <a href="#" class="ui-btn ui-corner-all ui-shadow">Tertinggi : 32c</a>
+          </div>
+
+          <div class="ui-block-b">
+            <a href="#" class="ui-btn ui-corner-all ui-shadow">Terendah : 25c</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div data-role="page" id="page_aktivitas">
+        <div data-role="header" id="header">
+            <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-arrow-l ui-btn-icon-left">Back</a>
+            <h1>Aktivitas</h1>
+        </div>
+        <div data-role="content" id="content">
+            <div id="update-aktivitas">Last update : 13.00 18-03-2016</div>
+            <hr />
+            <div class="content-primary">
+                <ul id="iGallery">
+                    <li><a href="images/4f7d341e82ba1.jpg"><img src="images/_4f7d341e82ba1.jpg" /></a></li>
+                    <li><a title="Add Image discription to Title Attribe of A tag to display in here" href="images/4f7d363cb2236.jpg"><img src="images/_4f7d363cb2236.jpg" /></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="page" data-theme="a" id="page_kontrol">
         <div data-role="header" data-position="inline">
+            <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-arrow-l ui-btn-icon-left">Back</a>
             <h1>Saklar Lampu</h1>
         </div>
         <div data-role="content" data-theme="a" style="padding: 2em;">
@@ -46,14 +194,15 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div> 
+
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
 
-            var startup = false;
-            var url = "http://ojixzzz.science:4855"; //"http://" + document.domain + ":" + location.port;
+            var startup = true;
+            var url = "http://" + document.domain + ":" + location.port;
             var socket = io.connect(url + "/socket");
 
             relay_push = function(nomor){
@@ -78,6 +227,14 @@
                 $('#lampu-4').val(msg['relay_4']).flipswitch('refresh');
                 startup = true;
             });
+
+            socket.on('sensor_data', function(msg) {
+                console.log(msg);
+            });
+
+            $( document ).delegate("#page_aktivitas", "pageinit", function() {
+                $('#iGallery').imageflip()
+            })
 
         });
     </script>

@@ -13,6 +13,11 @@ socketio = SocketIO(app)
 raspberry_connected = False
 client_connected = 0
 
+sensor_data = None
+tempMax = 0
+tempMin = 0
+sensor_count = 0
+
 @app.route('/')
 def main():
     return render_template('main.html')
@@ -28,6 +33,7 @@ def ws_conn():
     socketio.emit('status', {'data': '%s Klien terkoneksi' % client_connected}, namespace='/socket')
     if raspberry_connected:
         socketio.emit('relay_data', namespace="/socket_rpi")
+        socketio.emit('sensor_data', sensor_data, namespace="/socket")
     else:
         socketio.emit('status', {'data': 'Raspberry tidak terkoneksi'}, namespace='/socket')
 
@@ -72,6 +78,34 @@ def rpi_relay(message):
 @socketio.on('relay_data', namespace='/socket_rpi')
 def rpi_relay_data(message):
     socketio.emit('relay_data', message, namespace="/socket")
+
+@socketio.on('sensor_data', namespace='/socket_rpi')
+def rpi_sensor_data(message):
+    global sensor_data
+    global sensor_count
+    global tempMin
+    global tempMax
+    tempNow = message.get('temp')
+    if sensor_count == 3:
+        tempMax = tempNow
+        tempMin = tempNow
+    elif sensor_count > 100:
+        sensor_count = 4
+
+    if tempNow > tempMax:
+        tempMax = tempNow
+    if tempNow < tempMin:
+        tempMin = tempNow
+
+    datas = {
+        'temp': tempNow,
+        'temp_max': tempMax,
+        'temp_min': tempMin,
+    }
+    if client_connected:
+        socketio.emit('sensor_data', datas, namespace="/socket")
+    sensor_data = datas
+    sensor_count = sensor_count+1
 
 if __name__ == '__main__':
     socketio.run(app, "0.0.0.0", port=5008)
