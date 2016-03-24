@@ -103,7 +103,7 @@
       <div data-role="main" class="ui-content" style="padding: 2em;">
         <div class="ui-grid-a">
           <div class="ui-block-a">
-            <a href="#page_info" data-transition="fade" class="ui-btn ui-icon-cloud ui-btn-icon-left big-icon">Informasi<br/><small>(Suhu: 30c)</small></a>
+            <a href="#page_info" data-transition="fade" class="ui-btn ui-icon-cloud ui-btn-icon-left big-icon">Informasi<br/><small>(Suhu: <span id="txt_suhu2">-</span>c)</small></a>
             <a href="#page_kontrol" data-transition="fade" class="ui-btn ui-icon-gear ui-btn-icon-left big-icon">Kontrol</a>
           </div>
 
@@ -123,16 +123,16 @@
       <div data-role="main" class="ui-content" style="padding: 2em;">
         <div class="ui-grid-solo">
             <div class="ui-block-a">
-                <a href="#" class="ui-btn ui-corner-all ui-shadow">Suhu : 30c</a>
+                <a href="#" class="ui-btn ui-corner-all ui-shadow">Suhu : <span id="txt_suhu">-</span>c</a>
             </div>
         </div>
         <div class="ui-grid-a">
           <div class="ui-block-a">
-            <a href="#" class="ui-btn ui-corner-all ui-shadow">Tertinggi : 32c</a>
+            <a href="#" class="ui-btn ui-corner-all ui-shadow">Tertinggi : <span id="txt_suhumax">-</span>c</a>
           </div>
 
           <div class="ui-block-b">
-            <a href="#" class="ui-btn ui-corner-all ui-shadow">Terendah : 25c</a>
+            <a href="#" class="ui-btn ui-corner-all ui-shadow">Terendah : <span id="txt_suhumin">-</span>c</a>
           </div>
         </div>
       </div>
@@ -221,15 +221,26 @@
 
             socket.on('relay_data', function(msg) {
                 startup = false;
-                $('#lampu-1').val(msg['relay_1']).flipswitch('refresh');
-                $('#lampu-2').val(msg['relay_2']).flipswitch('refresh');
-                $('#lampu-3').val(msg['relay_3']).flipswitch('refresh');
-                $('#lampu-4').val(msg['relay_4']).flipswitch('refresh');
+                try { 
+                    $('#lampu-1').val(msg['relay_1']).flipswitch('refresh');
+                    $('#lampu-2').val(msg['relay_2']).flipswitch('refresh');
+                    $('#lampu-3').val(msg['relay_3']).flipswitch('refresh');
+                    $('#lampu-4').val(msg['relay_4']).flipswitch('refresh');
+                }
+                catch(err) {
+                    $('#lampu-1').val(msg['relay_1']);
+                    $('#lampu-2').val(msg['relay_2']);
+                    $('#lampu-3').val(msg['relay_3']);
+                    $('#lampu-4').val(msg['relay_4']);
+                }
                 startup = true;
             });
 
             socket.on('sensor_data', function(msg) {
-                console.log(msg);
+                $('#txt_suhu').text(msg['temp']);
+                $('#txt_suhu2').text(msg['temp']);
+                $('#txt_suhumin').text(msg['temp_min']);
+                $('#txt_suhumax').text(msg['temp_max']);
             });
 
             $( document ).delegate("#page_aktivitas", "pageinit", function() {
