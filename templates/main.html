@@ -95,70 +95,9 @@
 </head>
 <body>
 
-    <div data-role="page" id="page_home">
-      <div data-role="header" data-position="inline">
-        <h1>Rumah-pintar.net</h1>
-      </div>
-
-      <div data-role="main" class="ui-content" style="padding: 2em;">
-        <div class="ui-grid-a">
-          <div class="ui-block-a">
-            <a href="#page_info" data-transition="fade" class="ui-btn ui-icon-cloud ui-btn-icon-left big-icon">Informasi<br/><small>(Suhu: <span id="txt_suhu2">-</span>c)</small></a>
-            <a href="#page_kontrol" data-transition="fade" class="ui-btn ui-icon-gear ui-btn-icon-left big-icon">Kontrol</a>
-          </div>
-
-          <div class="ui-block-b">
-            <a href="#page_aktivitas" data-transition="fade" class="ui-btn ui-icon-camera ui-btn-icon-left big-icon">Aktivitas</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div data-role="page" id="page_info">
-      <div data-role="header" data-position="inline">
-        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-arrow-l ui-btn-icon-left">Back</a>
-        <h1>Informasi</h1>
-      </div>
-
-      <div data-role="main" class="ui-content" style="padding: 2em;">
-        <div class="ui-grid-solo">
-            <div class="ui-block-a">
-                <a href="#" class="ui-btn ui-corner-all ui-shadow">Suhu : <span id="txt_suhu">-</span>c</a>
-            </div>
-        </div>
-        <div class="ui-grid-a">
-          <div class="ui-block-a">
-            <a href="#" class="ui-btn ui-corner-all ui-shadow">Tertinggi : <span id="txt_suhumax">-</span>c</a>
-          </div>
-
-          <div class="ui-block-b">
-            <a href="#" class="ui-btn ui-corner-all ui-shadow">Terendah : <span id="txt_suhumin">-</span>c</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div data-role="page" id="page_aktivitas">
-        <div data-role="header" id="header">
-            <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-arrow-l ui-btn-icon-left">Back</a>
-            <h1>Aktivitas</h1>
-        </div>
-        <div data-role="content" id="content">
-            <div id="update-aktivitas">Last update : 13.00 18-03-2016</div>
-            <hr />
-            <div class="content-primary">
-                <ul id="iGallery">
-                    <li><a href="{{ url_for('static', filename='images/4f7d341e82ba1.jpg') }}"><img src="{{ url_for('static', filename='images/_4f7d341e82ba1.jpg') }}" /></a></li>
-                    <li><a title="Add Image discription to Title Attribe of A tag to display in here" href="{{ url_for('static', filename='images/4f7d363cb2236.jpg') }}"><img src="{{ url_for('static', filename='images/_4f7d363cb2236.jpg') }}" /></a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div data-role="page" data-theme="a" id="page_kontrol">
+    <div data-role="main" data-theme="a" id="page_kontrol">
         <div data-role="header" data-position="inline">
-            <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-arrow-l ui-btn-icon-left">Back</a>
-            <h1>Saklar Lampu</h1>
+            <h1>Rumah-pintar.net</h1>
         </div>
         <div data-role="content" data-theme="a" style="padding: 2em;">
             <div id="status">Status : </div>
@@ -235,17 +174,6 @@
                 }
                 startup = true;
             });
-
-            socket.on('sensor_data', function(msg) {
-                $('#txt_suhu').text(msg['temp']);
-                $('#txt_suhu2').text(msg['temp']);
-                $('#txt_suhumin').text(msg['temp_min']);
-                $('#txt_suhumax').text(msg['temp_max']);
-            });
-
-            $( document ).delegate("#page_aktivitas", "pageinit", function() {
-                $('#iGallery').imageflip()
-            })
 
         });
     </script>
