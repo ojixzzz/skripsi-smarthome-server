@@ -25,7 +25,7 @@ def ws_conn():
     global raspberry_connected
     global client_connected
     client_connected = client_connected+1
-    socketio.emit('status', {'data': 'Terhubung'}, namespace='/socket')
+    socketio.emit('status', {'data': 'Terhubung dengan smarthome'}, namespace='/socket')
     if raspberry_connected:
         socketio.emit('relay_data', namespace="/socket_rpi")
     else:
@@ -40,6 +40,7 @@ def ws_disconn():
 def ws_relay(message):
     global raspberry_connected
     if raspberry_connected:
+        socketio.emit('status', {'data': 'Terhubung dengan smarthome'}, namespace='/socket')
         socketio.emit('relay', message, namespace="/socket_rpi")
     else:
         data = {
